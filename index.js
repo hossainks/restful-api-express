@@ -1,5 +1,7 @@
 // Description: This file is the entry point of the application.
+const Joi = require("joi");
 const express = require("express");
+const e = require("express");
 const app = express();
 app.use(express.json());
 
@@ -18,12 +20,23 @@ app.get("/api/courses", (req, res) => {
 });
 
 app.post("/api/courses", (req, res) => {
-  if (!req.body.name || req.body.name.length < 3) {
+  const schema = Joi.object({
+    name: Joi.string().min(3).required(),
+  });
+  const { error, value } = schema.validate({ name: req.body.name });
+  // console.log(error);
+
+  /* if (!req.body.name || req.body.name.length < 3) {
     res
       .status(400)
       .send(
         JSON.stringify("Name is required and should be minimum 3 characters")
       );
+    return;
+  } */
+
+  if (error) {
+    res.status(400).send(error.details[0].message);
     return;
   }
 
