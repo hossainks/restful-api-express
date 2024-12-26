@@ -1,11 +1,21 @@
 // Description: This file is the entry point of the application.
 const Joi = require("joi");
+const morgan = require("morgan");
 const express = require("express");
 const logger = require("./logger.js");
 const app = express();
+/* console.log(`NODE_ENV: ${process.env.NODE_ENV}`);
+console.log(`app: ${app.get("env")}`); */
 
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(express.static("public"));
 app.use(logger);
+
+if (app.get("env") === "development") {
+  app.use(morgan("tiny"));
+  console.log("Morgan enabled...");
+}
 
 app.use(function (req, res, next) {
   console.log("Authentication...");
@@ -27,7 +37,7 @@ app.get("/api/courses", (req, res) => {
 });
 
 app.post("/api/courses", (req, res) => {
-  const { error } = validateCourse(req.body.name);
+  const { error } = validateCourse(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
   const course = {
