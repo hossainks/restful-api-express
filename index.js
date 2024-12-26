@@ -1,15 +1,11 @@
 // Description: This file is the entry point of the application.
 const Joi = require("joi");
 const express = require("express");
+const logger = require("./logger.js");
 const app = express();
 
 app.use(express.json());
-
-app.use(function (req, res, next) {
-  console.log("Logging...");
-  res.header("Access-Control-Allow-Origin", "*");
-  next();
-});
+app.use(logger);
 
 app.use(function (req, res, next) {
   console.log("Authentication...");
