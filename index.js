@@ -1,4 +1,5 @@
 // Description: This file is the entry point of the application.
+const config = require("config");
 const Joi = require("joi");
 const morgan = require("morgan");
 const express = require("express");
@@ -6,6 +7,11 @@ const logger = require("./logger.js");
 const app = express();
 /* console.log(`NODE_ENV: ${process.env.NODE_ENV}`);
 console.log(`app: ${app.get("env")}`); */
+
+// Configuration
+console.log("Application Name: " + config.get("name"));
+console.log("Mail Server: " + config.get("mail.host"));
+//console.log("Mail Password: " + config.get("mail.password"));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
