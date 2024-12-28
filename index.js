@@ -5,6 +5,8 @@ const morgan = require("morgan");
 const express = require("express");
 const logger = require("./logger.js");
 const app = express();
+const startUpDebugger = require("debug")("app:startup");
+const dbDebugger = require("debug")("app:db");
 /* console.log(`NODE_ENV: ${process.env.NODE_ENV}`);
 console.log(`app: ${app.get("env")}`); */
 
@@ -20,8 +22,10 @@ app.use(logger);
 
 if (app.get("env") === "development") {
   app.use(morgan("tiny"));
-  console.log("Morgan enabled...");
+  startUpDebugger("Morgan enabled...");
 }
+
+dbDebugger("Connected to the database...");
 
 app.use(function (req, res, next) {
   console.log("Authentication...");
